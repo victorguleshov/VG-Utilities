@@ -25,6 +25,26 @@ namespace VG.Extensions
             return list;
         }
 
+        public static IList<T> Shift<T>(this IList<T> list, int n)
+        {
+            if (n > 0)
+                for (var i = 0; i < n; i++)
+                {
+                    var item = list[0];
+                    list.RemoveAt(0);
+                    list.Add(item);
+                }
+            else if (n < 0)
+                for (var i = 0; i < Math.Abs(n); i++)
+                {
+                    var item = list[^1];
+                    list.RemoveAt(list.Count - 1);
+                    list.Insert(0, item);
+                }
+
+            return list;
+        }
+
         public static bool ContainsAll<T>(this IList<T> list, T[] candidate)
         {
             if (IsEmptyLocate(list, candidate))
