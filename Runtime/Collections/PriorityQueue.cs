@@ -1,9 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace VG.Collections
 {
-    public class PriorityQueue<T>
+    public class PriorityQueue<T> : IEnumerable<T>
     {
         private readonly bool _isMinPriorityQueue;
 
@@ -222,6 +223,19 @@ namespace VG.Collections
         {
             public float Priority { get; set; }
             public T Item { get; set; }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach (var node in queue)
+            {
+                yield return node.Item;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
