@@ -10,8 +10,10 @@ namespace VG.Extensions
     {
         public readonly List<(IList<T0>, IList<T1>)> viewsAndDataPairs;
 
-        public SetViewsWrapper((IList<T0> views, IList<T1> datas) valueTuple) =>
+        public SetViewsWrapper((IList<T0> views, IList<T1> datas) valueTuple)
+        {
             viewsAndDataPairs = new List<(IList<T0>, IList<T1>)> { valueTuple };
+        }
 
         public SetViewsWrapper<T0, T1> ByFunc(Func<T0, T1, int, bool> func)
         {
@@ -48,8 +50,7 @@ namespace VG.Extensions
 
     public static class ViewExtensions
     {
-        public static SetViewsWrapper<T0, T1> SetViews<T0, T1>(IList<T0> views, IList<T1> datas) where T0 : Component =>
-            new((views, datas));
+        public static SetViewsWrapper<T0, T1> SetViews<T0, T1>(IList<T0> views, IList<T1> datas) where T0 : Component => new((views, datas));
 
         /// <param name="views">List of views</param>
         /// <param name="datas">List of datas</param>
@@ -93,7 +94,7 @@ namespace VG.Extensions
 
             while (dataIndex < datas.Count)
             {
-                if (newView == null)
+                if (!newView)
                 {
                     newView = Object.Instantiate(views[dataIndex % savedViewsCount],
                         views[dataIndex % savedViewsCount].transform.parent);
@@ -113,7 +114,7 @@ namespace VG.Extensions
                 dataIndex++;
             }
 
-            if (newView != null) newView.gameObject.SetActive(false);
+            if (newView) newView.gameObject.SetActive(false);
 
             return result;
         }
@@ -166,6 +167,63 @@ namespace VG.Extensions
 
                 newView.gameObject.SetActive(true);
                 action.Invoke(newView, data, dataIndex);
+
+                result = true;
+
+                dataIndex++;
+            }
+
+            return result;
+        }
+
+        /// <param name="views">List of views</param>pdate View 
+        /// <param name="datas">List of datas</param>
+        /// <param name="action">Callback</param>
+        public static bool SetViews<T0, T1>(this IList<T0> views, IList<T1> datas, Action<T0, T1> action)
+            where T0 : Component
+        {
+            if (views.Count == 0) return false;
+            var maxSiblingIndexDelta =
+                views[0].transform.parent.childCount - views.Max(x => x.transform.GetSiblingIndex());
+            var dataIndex = 0;
+            var viewIndex = 0;
+            var result = false;
+
+            while (viewIndex < views.Count)
+            {
+                var view = views[viewIndex];
+
+                if (viewIndex < datas.Count && dataIndex < datas.Count)
+                {
+                    var data = datas[dataIndex];
+
+                    view.gameObject.SetActive(true);
+
+                    action.Invoke(view, data);
+                    result = true;
+                }
+                else
+                {
+                    view.gameObject.SetActive(false);
+                }
+
+                viewIndex++;
+                dataIndex++;
+            }
+
+            var savedViewsCount = views.Count;
+
+            while (dataIndex < datas.Count)
+            {
+                var newView = Object.Instantiate(views[dataIndex % savedViewsCount],
+                    views[dataIndex % savedViewsCount].transform.parent);
+                newView.transform.SetSiblingIndex(newView.transform.parent.childCount - maxSiblingIndexDelta);
+                views.Add(newView);
+
+                var data = datas[dataIndex];
+
+                newView.gameObject.SetActive(true);
+                action.Invoke(newView, data);
 
                 result = true;
 
@@ -229,6 +287,23 @@ namespace VG.Extensions
         }
 
         /// <param name="views">List of views</param>
+        /// <param name="action">Callback</param>
+        public static bool SetViews<T0>(this IList<T0> views, Action<T0, int> action = null)
+            where T0 : Component
+        {
+            var count = views.Count;
+            return SetViews(views, count, action);
+        }
+
+        /// <param name="views">List of views</param>
+        /// <param name="func">Callback</param>
+        public static bool SetViews<T0>(this IList<T0> views, Func<T0, int, bool> func) where T0 : Component
+        {
+            var count = views.Count;
+            return SetViews(views, count, func);
+        }
+
+        /// <param name="views">List of views</param>
         /// <param name="count">Count of views</param>
         /// <param name="func">Callback</param>
         public static bool SetViews<T0>(this IList<T0> views, int count, Func<T0, int, bool> func) where T0 : Component
@@ -267,7 +342,7 @@ namespace VG.Extensions
 
             while (dataIndex < count)
             {
-                if (newView == null)
+                if (!newView)
                 {
                     newView = Object.Instantiate(views[dataIndex % savedViewsCount],
                         views[dataIndex % savedViewsCount].transform.parent);
@@ -285,7 +360,7 @@ namespace VG.Extensions
                 dataIndex++;
             }
 
-            if (newView != null) newView.gameObject.SetActive(false);
+            if (newView) newView.gameObject.SetActive(false);
 
             return result;
         }
@@ -310,7 +385,7 @@ namespace VG.Extensions
             var savedViewsCount = views.Count;
             while (dataIndex < datas.Count)
             {
-                if (newView == null)
+                if (!newView)
                 {
                     newView = Object.Instantiate(views[dataIndex % savedViewsCount],
                         views[dataIndex % savedViewsCount].transform.parent);
@@ -334,7 +409,7 @@ namespace VG.Extensions
                 dataIndex++;
             }
 
-            if (newView != null) newView.gameObject.SetActive(false);
+            if (newView) newView.gameObject.SetActive(false);
         }
 
         public static void RemoveViews<T0>(this List<T0> views, int count) where T0 : Component
