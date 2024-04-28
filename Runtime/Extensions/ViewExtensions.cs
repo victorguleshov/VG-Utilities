@@ -176,7 +176,7 @@ namespace VG.Extensions
             return result;
         }
 
-        /// <param name="views">List of views</param>pdate View 
+        /// <param name="views">List of views</param>
         /// <param name="datas">List of datas</param>
         /// <param name="action">Callback</param>
         public static bool SetViews<T0, T1>(this IList<T0> views, IList<T1> datas, Action<T0, T1> action)

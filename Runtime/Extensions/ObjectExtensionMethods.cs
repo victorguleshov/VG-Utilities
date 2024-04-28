@@ -56,7 +56,10 @@ namespace VG.Extensions
         {
             public readonly string ParentPropertyName;
 
-            public MatchParentAttribute(string parentPropertyName) => ParentPropertyName = parentPropertyName;
+            public MatchParentAttribute(string parentPropertyName)
+            {
+                ParentPropertyName = parentPropertyName;
+            }
         }
     }
 }

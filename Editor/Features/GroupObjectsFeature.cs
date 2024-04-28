@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace VG.Editor.Features
+namespace EmeraldDreams.Editor
 {
     public class GroupObjectsFeature
     {
@@ -17,18 +17,13 @@ namespace VG.Editor.Features
         public static void GroupSelected(MenuCommand menuCommand)
         {
             if (_lastSelectedTransforms != null)
-            {
                 if (_lastSelectedTransforms.SequenceEqual(Selection.transforms))
                 {
                     _selectedItemsLeft--;
-                    if (_selectedItemsLeft <= 0)
-                    {
-                        _lastSelectedTransforms = null;
-                    }
+                    if (_selectedItemsLeft <= 0) _lastSelectedTransforms = null;
 
                     return;
                 }
-            }
 
             if (!Selection.activeTransform) return;
 
@@ -46,13 +41,11 @@ namespace VG.Editor.Features
             foreach (var transform in Selection.transforms)
             {
                 if (!parentFound)
-                {
                     if (!Array.Exists(Selection.transforms, element => element == transform.parent))
                     {
                         groupParent = transform.parent;
                         parentFound = true;
                     }
-                }
 
                 _hierarchyIndexes[transform] = transform.GetSiblingIndex();
 
@@ -68,23 +61,15 @@ namespace VG.Editor.Features
 
 
             foreach (var transform in Selection.transforms)
-            {
                 Undo.SetTransformParent(transform, go.transform, "Group Selected");
-            }
 
-            foreach (var item in sortedByIndex)
-            {
-                item.SetAsFirstSibling();
-            }
+            foreach (var item in sortedByIndex) item.SetAsFirstSibling();
 
             Selection.activeGameObject = go;
 
             _hierarchyIndexes = null;
 
-            if (menuCommand.context)
-            {
-                _lastSelectedTransforms = Selection.transforms;
-            }
+            if (menuCommand.context) _lastSelectedTransforms = Selection.transforms;
         }
     }
 }

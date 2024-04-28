@@ -14,11 +14,21 @@ namespace VG.Collections
 
         /// <summary> If min queue or max queue </summary>
         /// <param name="isMinPriorityQueue"></param>
-        public PriorityQueue(bool isMinPriorityQueue = false) => _isMinPriorityQueue = isMinPriorityQueue;
+        public PriorityQueue(bool isMinPriorityQueue = false)
+        {
+            _isMinPriorityQueue = isMinPriorityQueue;
+        }
 
         public int Count => queue.Count;
 
         public T this[int i] => queue[i].Item;
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach (var node in queue) yield return node.Item;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary> Enqueue the item with priority </summary>
         /// <param name="priority"></param>
@@ -223,19 +233,6 @@ namespace VG.Collections
         {
             public float Priority { get; set; }
             public T Item { get; set; }
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            foreach (var node in queue)
-            {
-                yield return node.Item;
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

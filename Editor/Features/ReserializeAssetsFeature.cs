@@ -1,5 +1,3 @@
-#if UNITY_EDITOR
-
 using System.Linq;
 using UnityEditor;
 
@@ -26,5 +24,3 @@ namespace VG.Editor.Features
             EditorUtility.IsPersistent(Selection.activeGameObject);
     }
 }
-
-#endif

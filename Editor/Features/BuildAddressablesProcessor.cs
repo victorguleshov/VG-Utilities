@@ -103,4 +103,3 @@ namespace VG.Editor.Features
         }
     }
 }
-

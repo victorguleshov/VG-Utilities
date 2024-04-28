@@ -9,7 +9,10 @@ namespace VG.Collections
     {
         private readonly PriorityQueue<T> queue;
 
-        public ReadOnlyPriorityQueue(PriorityQueue<T> queue) => this.queue = queue;
+        public ReadOnlyPriorityQueue(PriorityQueue<T> queue)
+        {
+            this.queue = queue;
+        }
 
         public int Count => queue.Count;
         public T this[int i] => queue[i];

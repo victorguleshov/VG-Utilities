@@ -185,7 +185,10 @@ namespace VG.Collections
 
         public class Node
         {
-            public Node(T value) => Value = value;
+            public Node(T value)
+            {
+                Value = value;
+            }
 
             public T Value { get; set; }
             public Node Next { get; set; }
