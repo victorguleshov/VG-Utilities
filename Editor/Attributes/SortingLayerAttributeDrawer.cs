@@ -4,8 +4,8 @@ using VG.Attributes;
 
 namespace VG.Editor.Attributes
 {
-    [CustomPropertyDrawer(typeof(SortingLayerIDAttribute))]
-    public class SpriteLayerAttributeDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(SortingLayerAttribute))]
+    public class SortingLayerAttributeDrawer : PropertyDrawer
     {
         private bool _checkedType;
 
