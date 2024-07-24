@@ -8,12 +8,8 @@ namespace VG.Extensions
 {
     public class ViewsPool<T> where T : Component
     {
-        private readonly Stack<T> stack = new();
         private readonly LinkedList<T> activeViews = new();
-        private int totalCount = 0;
-
-        public int Count => totalCount;
-        public int ActiveCount => activeViews.Count;
+        private readonly Stack<T> stack = new();
 
         public ViewsPool(IEnumerable<T> list)
         {
@@ -22,7 +18,7 @@ namespace VG.Extensions
                 stack.Push(view);
                 view.gameObject.SetActive(false);
 
-                totalCount++;
+                Count++;
             }
         }
 
@@ -30,16 +26,19 @@ namespace VG.Extensions
         {
             prefab.gameObject.SetActive(false);
             stack.Push(prefab);
-            totalCount++;
+            Count++;
 
-            for (var i = totalCount; i < count; i++)
+            for (var i = Count; i < count; i++)
             {
                 var view = Instantiate(prefab);
                 view.gameObject.SetActive(false);
                 stack.Push(view);
-                totalCount++;
+                Count++;
             }
         }
+
+        public int Count { get; private set; }
+        public int ActiveCount => activeViews.Count;
 
         private T CreateOrPop()
         {
@@ -55,7 +54,7 @@ namespace VG.Extensions
             {
                 var prefab = activeViews.Last.Value;
                 var view = Instantiate(prefab);
-                totalCount++;
+                Count++;
                 return view;
             }
         }

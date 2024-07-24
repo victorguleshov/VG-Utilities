@@ -97,8 +97,8 @@ Shader "UI/Overlay"
             fixed4 Overlay(fixed4 a, fixed4 b)
             {
                 fixed4 r = a < .5
-                    ? 2.0 * a * b
-                    : 1.0 - 2.0 * (1.0 - a) * (1.0 - b);
+                               ? 2.0 * a * b
+                               : 1.0 - 2.0 * (1.0 - a) * (1.0 - b);
                 r.a = b.a * a.a;
                 return r;
             }

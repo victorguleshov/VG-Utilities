@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace VG.Attributes
 {
-
-
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class DropdownAttribute : PropertyAttribute
     {
@@ -13,10 +11,6 @@ namespace VG.Attributes
             PropertyClass,
             StaticClass
         }
-
-        public MethodLocation Location { get; private set; }
-        public string MethodName { get; private set; }
-        public Type MethodOwnerType { get; private set; }
 
         public DropdownAttribute(string methodName)
         {
@@ -30,5 +24,9 @@ namespace VG.Attributes
             MethodOwnerType = methodOwner;
             MethodName = methodName;
         }
+
+        public MethodLocation Location { get; private set; }
+        public string MethodName { get; private set; }
+        public Type MethodOwnerType { get; private set; }
     }
 }
